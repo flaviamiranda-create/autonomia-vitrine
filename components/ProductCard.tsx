@@ -145,7 +145,7 @@ export default function ProductCard({
 
         {/* Popover */}
         {popoverOpen && (
-          <div className="absolute left-0 right-0 bottom-0 translate-y-full z-20 pt-2">
+          <div className="absolute left-0 right-0 bottom-0 translate-y-full z-20 pt-2" onClick={(e) => e.stopPropagation()}>
             <div className="bg-brand-text rounded-2xl p-4 shadow-2xl border border-white/5">
               {showEmailCapture && !emailSuccess ? (
                 <form onSubmit={handleEmailSubmit} className="space-y-3">
