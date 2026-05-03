@@ -54,7 +54,7 @@ export default function Home() {
                 status="available"
                 badge="GRATUITO"
                 badgeVariant="green"
-                accent="orange"
+                coverImage="/fotos/planilha-financeira.png"
                 buttonText="Quero a planilha"
                 onButtonClick={() => setLeadModalOpen(true)}
               />
@@ -66,7 +66,6 @@ export default function Home() {
                 status="locked"
                 badge="🔒 50 seguidores"
                 badgeVariant="orange"
-                accent="orange"
                 popoverText="Será liberada quando o perfil @autonomiabr atingir 50 seguidores. Siga para não perder."
               />
 
@@ -77,7 +76,6 @@ export default function Home() {
                 status="locked"
                 badge="🔒 200 seguidores"
                 badgeVariant="orange"
-                accent="purple"
                 popoverText="Liberado com 200 seguidores em @autonomiabr."
               />
 
@@ -88,7 +86,6 @@ export default function Home() {
                 status="locked"
                 badge="🔒 300 seguidores"
                 badgeVariant="orange"
-                accent="pink"
                 popoverText="Liberado com 300 seguidores em @autonomiabr."
               />
 
@@ -99,7 +96,6 @@ export default function Home() {
                 status="locked"
                 badge="🔒 500 seguidores"
                 badgeVariant="orange"
-                accent="orange"
                 popoverText="Liberado com 500 seguidores em @autonomiabr."
               />
 
@@ -118,7 +114,6 @@ export default function Home() {
                 status="coming-soon"
                 badge="EM BREVE"
                 badgeVariant="purple"
-                accent="purple"
                 popoverText="Em breve. Deixe seu e-mail para ser avisada no lançamento."
                 showEmailCapture
               />
@@ -130,14 +125,13 @@ export default function Home() {
                 status="coming-soon"
                 badge="EM BREVE"
                 badgeVariant="purple"
-                accent="purple"
                 popoverText="Em breve. Acompanhe @autonomiabr para saber quando lançar."
               />
 
             </div>
           </section>
 
-          {/* ── 3. PAGOS — ASSINATURA ─────────────────────────────── */}
+          {/* ── 3. ASSINATURA ─────────────────────────────────────── */}
           <section className="mb-20">
             <SectionLabel>ASSINATURA — gestão completa com IA</SectionLabel>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -149,62 +143,9 @@ export default function Home() {
                 status="available"
                 badge="DISPONÍVEL"
                 badgeVariant="orange"
-                accent="orange"
+                coverImage="/fotos/app-autonomia.png"
                 buttonText="Conhecer o app"
                 buttonHref="https://autonomiaapp.com.br"
-              />
-
-            </div>
-          </section>
-
-          {/* ── 4. SOB DEMANDA ────────────────────────────────────── */}
-          <section className="mb-20">
-            <SectionLabel>SOB DEMANDA — feito para o seu negócio</SectionLabel>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-
-              <ProductCard
-                title="Agente de Atendimento Personalizado"
-                description="Um assistente de IA configurado para o seu negócio específico — responde clientes, envia catálogo, agenda e cobra pelo WhatsApp."
-                category="Agente de IA"
-                status="sob-demanda"
-                badge="SOB DEMANDA"
-                badgeVariant="purple"
-                accent="purple"
-                popoverText="Interessada? Entre em contato pelo Instagram @autonomiabr"
-                footerText="Seu atendente por 1 salário mínimo, parcelado em 12x"
-              />
-
-              <ProductCard
-                title="Agente de Cobrança Automática"
-                description="Sequência automática de mensagens para clientes com pagamento pendente — gentil, firme, eficaz."
-                category="Agente de IA"
-                status="sob-demanda"
-                badge="SOB DEMANDA"
-                badgeVariant="purple"
-                accent="pink"
-                popoverText="Interessada? Entre em contato pelo Instagram @autonomiabr"
-              />
-
-              <ProductCard
-                title="Agente de Reativação de Clientes"
-                description="Mensagens automáticas para clientes que sumiram, com oferta no momento certo."
-                category="Agente de IA"
-                status="sob-demanda"
-                badge="SOB DEMANDA"
-                badgeVariant="purple"
-                accent="purple"
-                popoverText="Interessada? Entre em contato pelo Instagram @autonomiabr"
-              />
-
-              <ProductCard
-                title="Agente de Pós-venda"
-                description="Pede avaliação, pergunta se quer reagendar, mantém o cliente na base automaticamente."
-                category="Agente de IA"
-                status="sob-demanda"
-                badge="SOB DEMANDA"
-                badgeVariant="purple"
-                accent="pink"
-                popoverText="Interessada? Entre em contato pelo Instagram @autonomiabr"
               />
 
             </div>

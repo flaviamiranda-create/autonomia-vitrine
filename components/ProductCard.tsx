@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 
-type Status = "available" | "locked" | "coming-soon" | "sob-demanda";
+type Status = "available" | "locked" | "coming-soon";
 type BadgeVariant = "green" | "orange" | "purple";
 type Accent = "orange" | "purple" | "pink";
 
@@ -14,12 +14,12 @@ interface ProductCardProps {
   badge: string;
   badgeVariant: BadgeVariant;
   accent?: Accent;
+  coverImage?: string;
   buttonText?: string;
   buttonHref?: string;
   onButtonClick?: () => void;
   popoverText?: string;
   showEmailCapture?: boolean;
-  footerText?: string;
 }
 
 const accentGradients: Record<Accent, string> = {
@@ -32,13 +32,19 @@ const accentGradients: Record<Accent, string> = {
 };
 
 const badgeClasses: Record<BadgeVariant, string> = {
-  green:
-    "bg-green-500/15 text-green-400 border border-green-500/25",
-  orange:
-    "bg-[#FF4D1C]/15 text-[#FF4D1C] border border-[#FF4D1C]/25",
-  purple:
-    "bg-[#7B3FAD]/15 text-[#C4A3E8] border border-[#7B3FAD]/25",
+  green: "bg-green-500/20 text-green-400 border border-green-500/30",
+  orange: "bg-[#FF4D1C]/20 text-[#FF4D1C] border border-[#FF4D1C]/30",
+  purple: "bg-[#7B3FAD]/20 text-[#C4A3E8] border border-[#7B3FAD]/30",
 };
+
+function LockIcon() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+      <rect x="5" y="11" width="14" height="10" rx="2" stroke="#9E8B82" strokeWidth="1.5" />
+      <path d="M8 11V7a4 4 0 018 0v4" stroke="#9E8B82" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 export default function ProductCard({
   title,
@@ -48,12 +54,12 @@ export default function ProductCard({
   badge,
   badgeVariant,
   accent = "orange",
+  coverImage,
   buttonText,
   buttonHref,
   onButtonClick,
   popoverText,
   showEmailCapture,
-  footerText,
 }: ProductCardProps) {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [email, setEmail] = useState("");
@@ -72,9 +78,7 @@ export default function ProductCard({
     return () => document.removeEventListener("mousedown", handler);
   }, [popoverOpen]);
 
-  const isInteractive =
-    status === "locked" || status === "coming-soon" || status === "sob-demanda";
-
+  const isInteractive = status === "locked" || status === "coming-soon";
   const togglePopover = () => {
     if (isInteractive) setPopoverOpen((p) => !p);
   };
@@ -97,27 +101,21 @@ export default function ProductCard({
     }
   };
 
-  const ctaLabel =
-    status === "locked"
-      ? "Como desbloquear? →"
-      : status === "coming-soon"
-      ? "Avise-me quando sair →"
-      : "Saber mais →";
-
-  return (
-    <div
-      ref={cardRef}
-      className="relative flex flex-col rounded-2xl overflow-visible border border-brand-border shadow-sm"
-    >
-      {/* ── Dark cover ───────────────────────────────── */}
+  // ── LOCKED / COMING-SOON — estilo Midtrack ─────────────────────────────
+  if (isInteractive) {
+    return (
       <div
-        className={`relative px-5 pt-5 pb-8 ${isInteractive ? "cursor-pointer" : ""}`}
-        style={{ background: accentGradients[accent], minHeight: "190px" }}
+        ref={cardRef}
+        className="relative flex flex-col rounded-2xl overflow-visible border border-white/5 cursor-pointer select-none"
+        style={{ background: "#0E0B09", minHeight: "240px" }}
         onClick={togglePopover}
       >
         {/* Category + Badge */}
-        <div className="flex items-start justify-between gap-2 mb-5">
-          <span className="text-[10px] font-syne font-bold tracking-[0.18em] uppercase text-[#FF4D1C]">
+        <div className="flex items-start justify-between gap-2 px-5 pt-5">
+          <span
+            className="text-[10px] font-syne font-bold tracking-[0.18em] uppercase text-white"
+            style={{ opacity: 0.5 }}
+          >
             {category}
           </span>
           <span
@@ -127,98 +125,124 @@ export default function ProductCard({
           </span>
         </div>
 
-        {/* Title */}
+        {/* Lock icon — centralizado */}
+        <div className="flex-1 flex items-center justify-center py-5">
+          <LockIcon />
+        </div>
+
+        {/* Title + description */}
+        <div className="px-5 pb-5">
+          <h3
+            className="font-syne font-extrabold text-white text-lg leading-snug mb-2"
+            style={{ opacity: 0.5 }}
+          >
+            {title}
+          </h3>
+          <p className="text-xs font-sans leading-relaxed line-clamp-2" style={{ color: "rgba(255,255,255,0.28)" }}>
+            {description}
+          </p>
+        </div>
+
+        {/* Popover */}
+        {popoverOpen && (
+          <div className="absolute left-0 right-0 bottom-0 translate-y-full z-20 pt-2">
+            <div className="bg-brand-text rounded-2xl p-4 shadow-2xl border border-white/5">
+              {showEmailCapture && !emailSuccess ? (
+                <form onSubmit={handleEmailSubmit} className="space-y-3">
+                  <p className="text-white/75 text-xs font-sans leading-relaxed">
+                    {popoverText}
+                  </p>
+                  <div className="flex gap-2">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="seu@email.com"
+                      className="flex-1 bg-white/10 text-white text-xs rounded-lg px-3 py-2 placeholder:text-white/35 outline-none border border-white/10 focus:border-white/30 transition-colors"
+                    />
+                    <button
+                      type="submit"
+                      disabled={emailLoading || !email}
+                      className="px-3 py-2 bg-brand-purple text-white text-xs rounded-lg font-sans font-medium hover:opacity-90 disabled:opacity-50 transition-opacity whitespace-nowrap"
+                    >
+                      {emailLoading ? "..." : "Avise-me"}
+                    </button>
+                  </div>
+                </form>
+              ) : emailSuccess ? (
+                <p className="text-green-400 text-xs font-sans">
+                  ✓ Perfeito! Você será avisada quando lançar.
+                </p>
+              ) : (
+                <p className="text-white/75 text-xs font-sans leading-relaxed">
+                  {popoverText}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // ── AVAILABLE — com ou sem foto real ───────────────────────────────────
+  const coverStyle = coverImage
+    ? {
+        backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.75) 100%), url('${coverImage}')`,
+        backgroundSize: "cover" as const,
+        backgroundPosition: "center" as const,
+      }
+    : { background: accentGradients[accent] };
+
+  return (
+    <div
+      ref={cardRef}
+      className="relative flex flex-col rounded-2xl overflow-visible border border-brand-border shadow-sm"
+    >
+      {/* Dark / photo cover */}
+      <div
+        className="relative px-5 pt-5 pb-8"
+        style={{ ...coverStyle, minHeight: "190px" }}
+      >
+        <div className="flex items-start justify-between gap-2 mb-5">
+          <span className="text-[10px] font-syne font-bold tracking-[0.18em] uppercase text-white/80">
+            {category}
+          </span>
+          <span
+            className={`text-[10px] font-syne font-bold tracking-[0.08em] uppercase px-2.5 py-1 rounded-full whitespace-nowrap ${badgeClasses[badgeVariant]}`}
+          >
+            {badge}
+          </span>
+        </div>
         <h3 className="font-syne font-extrabold text-white text-lg leading-snug">
           {title}
         </h3>
-
-        {/* Lock veil */}
-        {status === "locked" && (
-          <div className="absolute inset-0 rounded-t-2xl bg-black/20" />
-        )}
       </div>
 
-      {/* ── White content ────────────────────────────── */}
+      {/* White content */}
       <div className="flex-1 bg-brand-card px-5 py-4 flex flex-col gap-3 rounded-b-2xl">
         <p className="text-sm text-brand-secondary font-sans leading-relaxed">
           {description}
         </p>
 
-        {footerText && (
-          <p className="text-xs text-brand-muted font-sans italic border-t border-brand-border pt-3 mt-1">
-            {footerText}
-          </p>
-        )}
-
-        {/* Available: real button */}
-        {status === "available" &&
-          (buttonHref ? (
-            <a
-              href={buttonHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-auto inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-brand-orange text-white font-sans font-medium text-sm hover:opacity-90 transition-opacity"
-            >
-              {buttonText}
-            </a>
-          ) : (
-            <button
-              onClick={onButtonClick}
-              className="mt-auto inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-brand-orange text-white font-sans font-medium text-sm hover:opacity-90 transition-opacity"
-            >
-              {buttonText}
-            </button>
-          ))}
-
-        {/* Interactive: subtle text CTA */}
-        {isInteractive && (
-          <button
-            onClick={togglePopover}
-            className="mt-auto text-xs text-brand-muted font-sans text-left hover:text-brand-secondary transition-colors"
+        {buttonHref ? (
+          <a
+            href={buttonHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-auto inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-brand-orange text-white font-sans font-medium text-sm hover:opacity-90 transition-opacity"
           >
-            {ctaLabel}
+            {buttonText}
+          </a>
+        ) : (
+          <button
+            onClick={onButtonClick}
+            className="mt-auto inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-brand-orange text-white font-sans font-medium text-sm hover:opacity-90 transition-opacity"
+          >
+            {buttonText}
           </button>
         )}
       </div>
-
-      {/* ── Popover ──────────────────────────────────── */}
-      {popoverOpen && (
-        <div className="absolute left-0 right-0 bottom-0 translate-y-full z-20 pt-2">
-          <div className="bg-brand-text rounded-2xl p-4 shadow-2xl border border-white/5">
-            {showEmailCapture && !emailSuccess ? (
-              <form onSubmit={handleEmailSubmit} className="space-y-3">
-                <p className="text-white/75 text-xs font-sans leading-relaxed">
-                  {popoverText}
-                </p>
-                <div className="flex gap-2">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="seu@email.com"
-                    className="flex-1 bg-white/10 text-white text-xs rounded-lg px-3 py-2 placeholder:text-white/35 outline-none border border-white/10 focus:border-white/30 transition-colors"
-                  />
-                  <button
-                    type="submit"
-                    disabled={emailLoading || !email}
-                    className="px-3 py-2 bg-brand-purple text-white text-xs rounded-lg font-sans font-medium hover:opacity-90 disabled:opacity-50 transition-opacity whitespace-nowrap"
-                  >
-                    {emailLoading ? "..." : "Avise-me"}
-                  </button>
-                </div>
-              </form>
-            ) : emailSuccess ? (
-              <p className="text-green-400 text-xs font-sans">
-                ✓ Perfeito! Você será avisada quando lançar.
-              </p>
-            ) : (
-              <p className="text-white/75 text-xs font-sans leading-relaxed">
-                {popoverText}
-              </p>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

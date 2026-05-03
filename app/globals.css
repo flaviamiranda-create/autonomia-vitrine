@@ -8,5 +8,7 @@ html {
 
 body {
   background-color: #FDF8F5;
+  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 2L38 20L20 38L2 20Z' fill='none' stroke='%23EAE0D9' stroke-width='0.8'/%3E%3C/svg%3E");
+  background-size: 40px 40px;
   color: #1A0F0A;
 }
