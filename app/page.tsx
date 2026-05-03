@@ -49,7 +49,7 @@ export default function Home() {
 
               <ProductCard
                 title="Planilha de Gestão Financeira"
-                description="Registre atendimentos, despesas e veja seu lucro real. Feita para profissionais de estética."
+                description="Registre atendimentos, despesas e veja seu lucro real. Feita para profissionais que vendem serviços."
                 category="Planilha"
                 status="available"
                 badge="GRATUITO"
