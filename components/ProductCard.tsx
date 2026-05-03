@@ -20,6 +20,7 @@ interface ProductCardProps {
   onButtonClick?: () => void;
   popoverText?: string;
   showEmailCapture?: boolean;
+  emailGroupId?: string;
 }
 
 const accentGradients: Record<Accent, string> = {
@@ -60,6 +61,7 @@ export default function ProductCard({
   onButtonClick,
   popoverText,
   showEmailCapture,
+  emailGroupId,
 }: ProductCardProps) {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [email, setEmail] = useState("");
@@ -91,7 +93,7 @@ export default function ProductCard({
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: "", email }),
+        body: JSON.stringify({ name: "", email, ...(emailGroupId ? { groupId: emailGroupId } : {}) }),
       });
       if (res.ok) setEmailSuccess(true);
     } catch {

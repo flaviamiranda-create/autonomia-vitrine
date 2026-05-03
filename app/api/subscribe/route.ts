@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
-  const { name, email } = await request.json();
+  const { name, email, groupId } = await request.json();
 
   if (!email) {
     return NextResponse.json({ error: "Email required" }, { status: 400 });
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     body: JSON.stringify({
       email,
       fields: { name: name || "" },
-      groups: ["186477355875698151"],
+      groups: [groupId || "186477355875698151"],
     }),
   });
 

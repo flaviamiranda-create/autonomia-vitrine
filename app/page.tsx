@@ -116,6 +116,7 @@ export default function Home() {
                 badgeVariant="purple"
                 popoverText="Em breve. Deixe seu e-mail para ser avisada no lançamento."
                 showEmailCapture
+                emailGroupId="186486670308148834"
               />
 
               <ProductCard
